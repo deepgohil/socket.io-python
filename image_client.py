@@ -5,20 +5,25 @@ import base64
 sio = socketio.Client()
 
 
+with open("i.jpg", "rb") as f:
+    lines = base64.b64encode(f.read())
+
 # //////////////////////////send text file over socket
+@sio.event
+def connect():
+    print('connection established')
+    sio.emit('test', lines)
+            # loopvar=False
+        # datatoemit=int(input("ENter data to emit"))
+        # x = str(datetime.datetime.now())
+        
+
 # @sio.event
 # def connect():
 #     print('connection established')
-#     loopvar=True
-#     while(loopvar):
-#         with open('readme.txt') as f:
-#             lines = str(f.readlines())
-#             loopvar=False
-#         # datatoemit=int(input("ENter data to emit"))
-#         # x = str(datetime.datetime.now())
-#         sio.emit('test', {'data': lines})
-
-
+#     with open("i.jpg", "rb") as image2string:
+#         converted_string = base64.b64encode(image2string.read())
+#         sio.emit('test', {'data': converted_string})
 
 
 @sio.event

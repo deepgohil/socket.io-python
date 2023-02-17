@@ -1,32 +1,45 @@
 import eventlet
 import socketio
+import base64
 
 sio = socketio.Server()
-
 app = socketio.WSGIApp(sio, static_files={
     '/': {'content_type': 'text/html', 'filename': 'index.html'}
 })
 
-# @sio.on('Hello', namespace='/chat')
-# def my_custom_event(sid, data):
-#     print(sid)
-#     print(data)
-
-# @sio.event
-# def my_message(sid, data):
-#     print('message ', data)
-
-# @sio.on('cMsg',namespace='/chat')
-# def test(sid,data):
-#     print('disconnect ', data)
-
-@sio.event(namespace='/chat')
+@sio.event
 def connect(sid, environ):
     print('connect ', sid)
 
+# //////////////////////////for text 
+@sio.event
+def test(sid, data):
+     # handle the message
+    # print(sid)
+    decodeit = open('hello_level.jpeg', 'wb')
+    decodeit.write(base64.b64decode((data)))
+    decodeit.close()
+    print(type(data))
+    # sio.emit("message",data,to=sid)
+
+
+# //////////////////////////////////for image
 # @sio.event
-# def disconnect(sid):
-#     print('disconnect ', sid)
+# def test(sid, data):
+#      # handle the message
+#     print(sid)
+#     print(data)
+#     decodeit = open('img.jpeg', 'wb')
+#     decodeit.write(base64.b64decode((data)))
+#     decodeit.close()
+
+
+@sio.event
+def disconnect(sid):
+    print('disconnect ', sid)
+
+
+
 
 if __name__ == '__main__':
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
